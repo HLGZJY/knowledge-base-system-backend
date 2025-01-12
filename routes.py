@@ -2,7 +2,7 @@ from flask import Blueprint, request, jsonify, current_app
 from werkzeug.utils import secure_filename
 import os
 from datetime import datetime
-from models import db, KnowledgeItem
+from models import db, KnowledgeItem, Category
 
 api = Blueprint('api', __name__)
 

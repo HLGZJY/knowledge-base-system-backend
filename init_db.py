@@ -1,35 +1,14 @@
 from app import create_app
-from models import db, KnowledgeItem
+from models import db, KnowledgeItem, Category
 
 def init_db():
     app = create_app()
     with app.app_context():
-        # 删除所有现有数据
+        # 删除所有表
         db.drop_all()
         # 创建所有表
         db.create_all()
-        
-        # 添加测试数据
-        test_items = [
-            KnowledgeItem(
-                title='Python Programming',
-                content='Python is a high-level programming language known for its simplicity and readability.',
-                author_id=1,
-                image_url='https://picsum.photos/400/200'
-            ),
-            KnowledgeItem(
-                title='Flask Web Framework',
-                content='Flask is a lightweight web application framework designed to get started quickly and easily.',
-                author_id=1,
-                image_url='https://picsum.photos/400/201'
-            ),
-            KnowledgeItem(
-                title='React Frontend Library',
-                content='React is a JavaScript library for building user interfaces, maintained by Facebook.',
-                author_id=1,
-                image_url='https://picsum.photos/400/202'
-            )
-        ]
+
         # 添加默认分类
         default_categories = [
             {
@@ -53,9 +32,45 @@ def init_db():
                 'icon': 'bank'
             }
         ]
+
+        # 添加分类
+        for category in default_categories:
+            cat = Category(
+                name=category['name'],
+                description=category['description'],
+                icon=category['icon']
+            )
+            db.session.add(cat)
         
-        for item in test_items:
-            db.session.add(item)
+        # 提交分类
+        db.session.commit()
+
+        # 添加测试数据
+        test_items = [
+            KnowledgeItem(
+                title='测试知识条目1',
+                content='这是一个测试知识条目的内容。',
+                image_url='https://picsum.photos/400/200'
+            ),
+            KnowledgeItem(
+                title='测试知识条目2',
+                content='这是另一个测试知识条目的内容。',
+                image_url='https://picsum.photos/400/201'
+            ),
+            KnowledgeItem(
+                title='测试知识条目3',
+                content='这是第三个测试知识条目的内容。',
+                image_url='https://picsum.photos/400/202'
+            )
+        ]
+        
+        # 获取第一个分类的ID
+        first_category = Category.query.first()
+        if first_category:
+            # 为测试数据添加分类ID
+            for item in test_items:
+                item.category_id = first_category.id
+                db.session.add(item)
         
         db.session.commit()
         print('测试数据已添加到数据库')
