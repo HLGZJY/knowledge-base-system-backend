@@ -116,3 +116,14 @@ def upload_file():
         # 返回文件URL
         file_url = f"/uploads/{unique_filename}"
         return jsonify({'url': file_url})
+# 获取所有分类
+@api.route('/categories', methods=['GET'])
+def get_categories():
+    categories = Category.query.all()
+    return jsonify([cat.to_dict() for cat in categories])
+
+# 根据分类获取知识条目
+@api.route('/knowledge/category/<int:category_id>', methods=['GET'])
+def get_knowledge_by_category(category_id):
+    items = KnowledgeItem.query.filter_by(category_id=category_id).all()
+    return jsonify([item.to_dict() for item in items])

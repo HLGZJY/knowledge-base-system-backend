@@ -30,6 +30,29 @@ def init_db():
                 image_url='https://picsum.photos/400/202'
             )
         ]
+        # 添加默认分类
+        default_categories = [
+            {
+                'name': '学习指导',
+                'description': '学习方法、考试技巧等学习相关指导',
+                'icon': 'book'
+            },
+            {
+                'name': '生活指导',
+                'description': '心理咨询、生活适应等日常生活指导',
+                'icon': 'heart'
+            },
+            {
+                'name': '职业规划',
+                'description': '就业指导、考研建议等职业发展规划',
+                'icon': 'compass'
+            },
+            {
+                'name': '校园事务',
+                'description': '规章制度、奖助学金等校园相关事务',
+                'icon': 'bank'
+            }
+        ]
         
         for item in test_items:
             db.session.add(item)
